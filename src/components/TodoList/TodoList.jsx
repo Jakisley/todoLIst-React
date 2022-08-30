@@ -1,7 +1,7 @@
 import styles from './TodoList.module.css';
 import defaultCheck from "../../images/defaultCheckBox.svg";
 import completedCheck from "../../images/completedCheckBox.svg";
-console.log(styles);
+
 const TodoList = (props) => {
   let ischecked = false;
   const listCheckClick = (ev) => {
