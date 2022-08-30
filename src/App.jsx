@@ -1,18 +1,28 @@
-import React,{Component} from 'react';
-import Header from './components/header/Header.jsx';
-import InputAddToDo from './components/inputAddTodo/InputAddTodo.jsx';
-import TodoList from './components/todoList/TodoList.jsx';
-import styles from'./App.module.css';
+import React from 'react';
+
+import Header from './components/Header';
+import Footer from './components/Footer';
+import InputAddToDo from './components/InputAddTodo';
+import TodoList from './components/TodoList';
+import LowerMenu from './components/LowerMenu';
+
+
+import styles from './App.module.css';
+
+
+const list = React.createContext([]);
+console.log(list);
 function App() {
   return (
-    <div className={styles.app}>
+    <section className={styles.app}>
       <Header />
-      <div  className={styles.main}>
+      <section className={styles.main}>
         <InputAddToDo />
         <TodoList />
-      </div>
-    </div>
-
+        <LowerMenu />
+      </section>
+      <Footer />
+    </section>
   );
 }
 

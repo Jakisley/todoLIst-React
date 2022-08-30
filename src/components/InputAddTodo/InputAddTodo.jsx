@@ -12,9 +12,9 @@ const InputAddToDo = () => {
     }
   }
   return (
-    <section>
+    <section className={styles.todoAddWrapper}>
       <button className={styles.checkAllTodoBtn} onClick={checkAllTodoBtnClick}>❯</button>
-      <input className={styles.ToDoAdd} type="text" placeholder="What needs to be done?" autoFocus />
+      <input className={styles.todoAdd} type="text" placeholder="What needs to be done?" autoFocus />
     </section>
   )
 
