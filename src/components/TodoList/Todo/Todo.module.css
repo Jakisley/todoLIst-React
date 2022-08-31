@@ -16,11 +16,11 @@
   margin: 10px 13px 10px 5px;
   float: left;
   cursor: pointer;
-  background-image: url(../../images/defaultCheckBox.svg);
+  background-image: url(../../../images/defaultCheckBox.svg);
 }
 
 .checkCompleted {
-  background-image: url(../../images/completedCheckBox.svg);
+  background-image: url(../../../images/completedCheckBox.svg);
 }
 
 .listElement {

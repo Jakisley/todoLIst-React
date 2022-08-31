@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -14,17 +14,17 @@ import styles from './App.module.css';
 function App() {
 
   const [todoArray, setTodoArray] = useState([]);
-  const onChangeArray = (todoArray) => {
-    setTodoArray(todoArray);
-    console.log(todoArray);
-  }
+  useEffect(() => {
+  console.log(todoArray);
+  },
+  [todoArray]);
 
   return (
     <section className={styles.app}>
       <Header />
       <section className={styles.main}>
-        <InputAddToDo todoArray={todoArray} onChangeArray={onChangeArray} />
-        <TodoList todoArray={todoArray} onChangeArray={onChangeArray}/>
+        <InputAddToDo todoArray={todoArray} onChangeArray={setTodoArray} />
+        <TodoList todoArray={todoArray} onChangeArray={setTodoArray} />
         <LowerMenu />
       </section>
       <Footer />

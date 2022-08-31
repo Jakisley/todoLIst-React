@@ -2,18 +2,23 @@ import styles from './InputAddTodo.module.css';
 import { useState } from 'react';
 
 const InputAddToDo = (props) => {
-  const { todoArray, onChangeArray } = props;
   const [todo, setTodo] = useState('');
   const [isChecked, setIsChecked] = useState(false)
-
+  const { todoArray, onChangeArray } = props;
 
   const handleChange = (event) => {
     setTodo(event.target.value);
   }
   const handleKeyDown = (event) => {
     if (event.code === 'Enter') {
-      todoArray.push({ description: todo, state: 'active' });
-      onChangeArray(todoArray);
+      let key = 0;
+
+      if (todoArray.length>0) {
+         key = todoArray.length;
+      } 
+
+      const updatedTodoArr = [...todoArray, { key:+key, description: todo, state: 'completed' }]
+      onChangeArray(updatedTodoArr);
       setTodo('');
     }
   }
