@@ -1,35 +1,36 @@
 import styles from './InputAddTodo.module.css';
 import { useState } from 'react';
-const InputAddToDo = () => {
-  const [count, setCount] = useState('');
-  let ischecked = false;
+
+const InputAddToDo = (props) => {
+  const { todoArray, onChangeArray } = props;
+  const [todo, setTodo] = useState('');
+  const [isChecked, setIsChecked] = useState(false)
 
 
-  const handleChange=(ev)=>{
-    setCount(ev.target.value);
-    console.log(count)
-
+  const handleChange = (event) => {
+    setTodo(event.target.value);
   }
-  const handlesSubmit = () => {
-    alert(count);
-    setCount('');
+  const handleKeyDown = (event) => {
+    if (event.code === 'Enter') {
+      todoArray.push({ description: todo, state: 'active' });
+      onChangeArray(todoArray);
+      setTodo('');
+    }
   }
 
-  const handleClick = (ev) => {
-    if (!ischecked) {
-      ev.target.style.color = "#737373";
-      ischecked = true;
+  const handleClick = (event) => {
+    if (!isChecked) {
+      event.target.style.color = "#737373";
+      setIsChecked(true);
     } else {
-      ev.target.style.color = "#e6e6e6";
-      ischecked = false;
+      event.target.style.color = "#e6e6e6";
+      setIsChecked(false);
     }
   }
   return (
     <section className={styles.todoAddWrapper}>
       <button className={styles.checkAllTodoBtn} onClick={handleClick}>❯</button>
-      <form onSubmit={handlesSubmit}>
-        <input className={styles.todoAdd} value={count} onChange={handleChange} name="newTodo" type="text" placeholder="What needs to be done?" autoFocus/>
-      </form>
+      <input className={styles.todoAdd} value={todo} onKeyDown={handleKeyDown} onChange={handleChange} name="newTodo" type="text" placeholder="What needs to be done?" autoFocus />
     </section>
   )
 
