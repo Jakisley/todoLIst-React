@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -13,17 +13,11 @@ import styles from './App.module.css';
 
 function App() {
 
-  const [todoArray, setTodoArray] = useState(JSON.parse(localStorage.getItem('todos')) || []);
-
-
-
-
-
+  const [todoArray, setTodoArray] = useState([]);
   useEffect(() => {
-
-    localStorage.setItem('todos', JSON.stringify(todoArray));
+  console.log(todoArray);
   },
-    [todoArray]);
+  [todoArray]);
 
   return (
     <section className={styles.app}>
