@@ -31,7 +31,6 @@ const Todo = (props) => {
   }
   const chageInput = (ev) => {
     const id = +ev.target.parentElement.id;
-    const index = todoArray.findIndex(todo => todo.key === id);
     const sibling = ev.target.nextSibling
     sibling.focus();
     onfocus(sibling, 'focus');

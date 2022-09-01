@@ -14,8 +14,10 @@
 }
 
 .lowerMenuClearBtn {
-  visibility: hidden;
   cursor:pointer;
+}
+.hiden{
+  visibility: hidden;
 }
 
 .lowerMenuLinks {

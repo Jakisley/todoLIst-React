@@ -3,10 +3,10 @@ import React from 'react';
 
 
 const TodoList = (props) => {
-  const {todoArray,onChangeArray} =props;
+  const {todoArray,onChangeArray,filter} =props;
   return (
     <section>
-      {props.todoArray.map((todo) => <Todo
+      {filter.map((todo) => <Todo
         key={todo.key}
         id={todo.key}
         text={todo.description}

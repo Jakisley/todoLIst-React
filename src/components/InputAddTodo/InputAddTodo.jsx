@@ -12,9 +12,9 @@ const InputAddToDo = (props) => {
   const handleKeyDown = (event) => {
     if (event.code === 'Enter') {
       let key = 0;
-
-      if (todoArray.length > 0) {
-        key = todoArray.length;
+      const arraylength =todoArray.length;
+      if (arraylength > 0) {
+        key = todoArray[arraylength-1].key+1;
       }
       if (event.target.value) {
         const updatedTodoArr = [...todoArray, { key: +key, description: todo, state: 'active' }]
