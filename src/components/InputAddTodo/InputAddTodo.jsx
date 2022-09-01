@@ -17,7 +17,7 @@ const InputAddToDo = (props) => {
          key = todoArray.length;
       } 
 
-      const updatedTodoArr = [...todoArray, { key:+key, description: todo, state: 'completed' }]
+      const updatedTodoArr = [...todoArray, { key:+key, description: todo, state: 'active' }]
       onChangeArray(updatedTodoArr);
       setTodo('');
     }
