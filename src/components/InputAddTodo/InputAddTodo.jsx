@@ -13,24 +13,34 @@ const InputAddToDo = (props) => {
     if (event.code === 'Enter') {
       let key = 0;
 
-      if (todoArray.length>0) {
-         key = todoArray.length;
-      } 
-
-      const updatedTodoArr = [...todoArray, { key:+key, description: todo, state: 'active' }]
-      onChangeArray(updatedTodoArr);
-      setTodo('');
+      if (todoArray.length > 0) {
+        key = todoArray.length;
+      }
+      if (event.target.value) {
+        const updatedTodoArr = [...todoArray, { key: +key, description: todo, state: 'active' }]
+        onChangeArray(updatedTodoArr);
+        setTodo('');
+      }
     }
   }
 
   const handleClick = (event) => {
-    if (!isChecked) {
-      event.target.style.color = "#737373";
-      setIsChecked(true);
+
+    const filter = todoArray.findIndex(todo => todo.state === 'active');
+    const updatedTodoArr = [...todoArray];
+    if (filter === -1) {
+      for (let i = 0; i < updatedTodoArr.length; i++) {
+        updatedTodoArr[i]['state'] = 'active';
+        event.target.style.color = "#e6e6e6";
+      }
     } else {
-      event.target.style.color = "#e6e6e6";
-      setIsChecked(false);
+      for (let i = 0; i < updatedTodoArr.length; i++) {
+        updatedTodoArr[i]['state'] = 'completed';
+        event.target.style.color = "#737373";
+      }
     }
+    onChangeArray(updatedTodoArr);
+
   }
   return (
     <section className={styles.todoAddWrapper}>

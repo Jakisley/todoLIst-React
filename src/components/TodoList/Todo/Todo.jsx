@@ -34,7 +34,7 @@ const Todo = (props) => {
     const index = todoArray.findIndex(todo => todo.key === id);
     const sibling = ev.target.nextSibling
     sibling.focus();
-    onfocus(sibling,'focus');
+    onfocus(sibling, 'focus');
 
   }
   const onfocus = (sibling) => {
@@ -51,10 +51,12 @@ const Todo = (props) => {
     if (ev.code === 'Enter') {
       const id = +ev.target.parentElement.id
       const index = todoArray.findIndex(todo => todo.key === id);
-      const updatedTodoArr = [...todoArray];
-      updatedTodoArr[index]['description'] = ev.target.value;
-      onChangeArray(updatedTodoArr);
-      ev.target.style.zIndex = 0;
+      if (ev.target.value) {
+        const updatedTodoArr = [...todoArray];
+        updatedTodoArr[index]['description'] = ev.target.value;
+        onChangeArray(updatedTodoArr);
+        ev.target.style.zIndex = 0;
+      }
     }
   }
   return (

@@ -14,14 +14,12 @@ import styles from './App.module.css';
 function App() {
 
   const [todoArray, setTodoArray] = useState(JSON.parse(localStorage.getItem('todos')) || []);
-
-
-
-
+  // const [filter, setFillter] = useState[todoArray];
 
   useEffect(() => {
 
     localStorage.setItem('todos', JSON.stringify(todoArray));
+  
   },
     [todoArray]);
 
