@@ -1,9 +1,9 @@
-.todoAddWrapper{
+.todoAddWrapper {
   box-shadow: inset 0 -2px 1px rgb(0 0 0 / 9%);
   padding: 2px;
 }
+
 .todoAdd {
- 
   width: 88%;
   font-size: 24px;
   line-height: 1.4em;
@@ -36,5 +36,9 @@
   font-size: 22px;
   color: #e6e6e6;
   background: none;
-  cursor:pointer;
+  cursor: pointer;
+}
+
+.checkAllTodoBtnActive {
+  color: #737373;
 }

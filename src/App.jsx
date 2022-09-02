@@ -7,56 +7,75 @@ import InputAddToDo from './components/InputAddTodo';
 import TodoList from './components/TodoList';
 import LowerMenu from './components/LowerMenu';
 
-
 import styles from './App.module.css';
 
-
-function App() {
-
+const App = () => {
   const [todoArray, setTodoArray] = useState(JSON.parse(localStorage.getItem('todos')) || []);
   const [filterCondition, setFillterCondition] = useState('all');
-  const [filter, setFillter] = useState(todoArray);
-  const [count, setCount] = useState(0);
+  const [countActive, setCountActive] = useState(0);
+
+  const delAllCompleted = () => {
+    const updatedTodoArr = todoArray.filter(element => element.state === 'active');
+    setTodoArray(updatedTodoArr);
+
+  };
+
+  const addTodo = (todo) => {
+    let key = 0;
+    const arraylength = todoArray.length;
+    if (arraylength > 0) {
+      key = todoArray[arraylength - 1].key + 1;
+    };
+    if (todo && todo[0] !== ' ') {
+      const updatedTodoArr = [...todoArray, { key: +key, description: todo, state: 'active' }]
+      setTodoArray(updatedTodoArr);
+    };
+  };
+  const changeAllCheck = () => {
+    const index = todoArray.findIndex(todo => todo.state === 'active');
+    const updatedTodoArr = [...todoArray];
+    let state = '';
+    index === -1 ? state = 'active' : state = 'completed';
+    updatedTodoArr.filter(element => element.state = state);
+    setTodoArray(updatedTodoArr);
+  };
 
 
   useEffect(() => {
 
     localStorage.setItem('todos', JSON.stringify(todoArray));
+    setCountActive(todoArray.filter(element => element.state === 'active').length);
 
-    if (filterCondition === 'all') {
-      setFillter(todoArray)
-    } else if (filterCondition === 'active') {
-      const updatedTodoArr = todoArray.filter(element => element.state === 'active')
-      setFillter(updatedTodoArr);
-
-    } else {
-      const updatedTodoArr = todoArray.filter(element => element.state === 'completed')
-      setFillter(updatedTodoArr);
-
-    }
-    let counter = 0
-    for (let i = 0; i < todoArray.length; i++) {
-      if (todoArray[i].state === 'active') {
-        counter += 1;
-      }
-    }
-    setCount(counter);
-  },
-    [todoArray, filterCondition]);
-
-
+  }, [todoArray, filterCondition]);
 
   return (
     <section className={styles.app}>
       <Header />
+
       <section className={styles.main}>
-        <InputAddToDo todoArray={todoArray} onChangeArray={setTodoArray} />
-        <TodoList filter={filter} todoArray={todoArray} onChangeArray={setTodoArray} />
-        <LowerMenu setFillterCondition={setFillterCondition} todoArray={todoArray} setTodoArray={setTodoArray} count={count} />
+        <InputAddToDo
+          isAllCompleted={countActive === 0}
+          addTodo={addTodo}
+          changeAllCheck={changeAllCheck}
+        />
+
+        <TodoList
+          todoArray={todoArray}
+          onChangeArray={setTodoArray}
+          filterCondition={filterCondition}
+        />
+
+        <LowerMenu
+          setFillterCondition={setFillterCondition}
+          countActive={countActive}
+          isEnyCompleted={(todoArray.length - countActive) > 0}
+          delAllCompleted={delAllCompleted}
+        />
       </section>
+
       <Footer />
     </section>
   );
-}
+};
 
 export default App;
