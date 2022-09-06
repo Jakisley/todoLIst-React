@@ -1,23 +1,24 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import InputAddToDo from './components/InputAddTodo';
 import TodoList from './components/TodoList';
 import LowerMenu from './components/LowerMenu';
-
 import styles from './App.module.css';
 
 const App = () => {
   const [todoArray, setTodoArray] = useState(JSON.parse(localStorage.getItem('todos')) || []);
-  const [filterCondition, setFillterCondition] = useState('all');
+  const [filterCondition, setFillterCondition] = useState(localStorage.getItem('fillter') || 'all');
   const [countActive, setCountActive] = useState(0);
+  const [filltredArray, setFilltredArray] = useState(todoArray);
 
-  const delAllCompleted = () => {
-    const updatedTodoArr = todoArray.filter(element => element.state === 'active');
-    setTodoArray(updatedTodoArr);
+  const updatedTodoArr = useMemo(() => {
+    return [...todoArray];
+  }, [todoArray]);
 
+  const getIndex = (key) => {
+    return todoArray.findIndex(element => element.key === key);
   };
 
   const addTodo = (todo) => {
@@ -26,27 +27,45 @@ const App = () => {
     if (arraylength > 0) {
       key = todoArray[arraylength - 1].key + 1;
     };
-    if (todo && todo[0] !== ' ') {
-      const updatedTodoArr = [...todoArray, { key: +key, description: todo, state: 'active' }]
-      setTodoArray(updatedTodoArr);
+    if (todo) {
+      setTodoArray([...todoArray, { key: +key, description: todo, state: 'active' }]);
     };
   };
+
   const changeAllCheck = () => {
     const index = todoArray.findIndex(todo => todo.state === 'active');
-    const updatedTodoArr = [...todoArray];
-    let state = '';
-    index === -1 ? state = 'active' : state = 'completed';
-    updatedTodoArr.filter(element => element.state = state);
+    const state = index === -1 ? 'active' : 'completed';
+    setTodoArray(updatedTodoArr.filter(element => element.state = state));
+  };
+
+  const changeCheck = (key) => {
+    const index = getIndex(key);
+    updatedTodoArr[index].state = updatedTodoArr[index].state === 'active' ? 'completed' : 'active';
     setTodoArray(updatedTodoArr);
   };
 
+  const delElement = (key) => {
+    const index = todoArray.findIndex(element => element.key === key);
+    updatedTodoArr.splice(index, 1);
+    setTodoArray(updatedTodoArr);
+  };
+
+  const delAllCompleted = () => {
+    setTodoArray(todoArray.filter(element => element.state === 'active'));
+  };
 
   useEffect(() => {
+    localStorage.setItem('fillter', filterCondition);
+  }, [filterCondition]);
 
+  useEffect(() => {
+    setFilltredArray(filterCondition !== 'all' ? todoArray.filter(element => element.state === filterCondition) : todoArray)
+  }, [todoArray, filterCondition]);
+
+  useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todoArray));
     setCountActive(todoArray.filter(element => element.state === 'active').length);
-
-  }, [todoArray, filterCondition]);
+  }, [todoArray]);
 
   return (
     <section className={styles.app}>
@@ -60,9 +79,10 @@ const App = () => {
         />
 
         <TodoList
-          todoArray={todoArray}
+          fillteredArray={filltredArray}
           onChangeArray={setTodoArray}
-          filterCondition={filterCondition}
+          delElement={delElement}
+          changeCheck={changeCheck}
         />
 
         <LowerMenu

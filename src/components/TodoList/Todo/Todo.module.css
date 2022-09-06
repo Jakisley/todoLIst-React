@@ -1,10 +1,10 @@
-.listWrapper {
+.listContainer{
   box-shadow: inset 0 -2px 1px rgb(0 0 0 / 6%);
   padding: 2px;
 
 }
 
-.listWrapper:hover .listDestroyBtn {
+.listContainer:hover .listDestroyBtn {
   display: block;
 }
 
@@ -35,25 +35,14 @@
   position: relative;
 }
 
-.bottomElement {
-  width: 87%;
-  font-size: 24px;
-  line-height: 1.4em;
-  border: 0;
-  padding: 16px;
-  box-sizing: border-box;
-  z-index: 0;
-  position: absolute;
-  left: 64px;
-  cursor: unset;
-  color: #4d4d4d;
-}
-
 .textCopmleted {
   color: #e6e6e6;
   text-decoration: line-through;
 }
-
+.focusElement{
+  color:black;
+  text-decoration: none;
+}
 .listDestroyBtn {
   display: none;
   position: absolute;

@@ -1,23 +1,19 @@
 import Todo from './Todo/Todo.jsx';
 import React from 'react';
 
-
 const TodoList = (props) => {
-  const { todoArray, onChangeArray, filterCondition } = props;
-  let filltredArr = [...todoArray];
-
-  if (filterCondition !== 'all') {
-    filltredArr = todoArray.filter(element => element.state === filterCondition);
-  }
+const { fillteredArray, onChangeArray, delElement,changeCheck} = props;
 
   return (
     <section>
-      {filltredArr.map((todo) => (
+      {fillteredArray.map((todo) => (
         <Todo
           key={todo.key}
           todo={todo}
-          todoArray={todoArray}
+          todoArray={fillteredArray}
           onChangeArray={onChangeArray}
+          delElement={delElement}
+          changeCheck={changeCheck}
         />
       ))}
     </section>

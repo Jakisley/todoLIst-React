@@ -1,37 +1,32 @@
+import React from 'react';
 import styles from './LowerMenu.module.css';
+import { useMemo } from 'react';
 
 function LowerMenu(props) {
-
   const { setFillterCondition, countActive, isEnyCompleted, delAllCompleted } = props;
-  const message = countActive > 1 ? `${countActive} items left` : `${countActive} item left`;
+  const message = useMemo(() => {
+    return `${countActive} ${countActive > 1 ? 'items left' : 'item left'}`;
+  }, [countActive]);
 
-  const clearBtnStyles = isEnyCompleted ?
-    styles.lowerMenuClearBtn :
-    styles.hiden;
-
-  const onClickLowerMenu = (fillter) => {
-    setFillterCondition(fillter);
-  };
-
-  const clearCompleted = () => {
-    delAllCompleted();
-  };
+  const clearBtnStyles = useMemo(() => {
+    return isEnyCompleted ? styles.lowerMenuClearBtn : styles.hiden;
+  }, [isEnyCompleted]);
 
   return (
     <section className={styles.lowerMenuWrapper}>
       <span className={styles.lowerMenuText}>{message}</span>
 
       <div className={styles.lowerMenuLinks}>
-        <p className={styles.lowerMenuLink} onClick={() => onClickLowerMenu('all')}>All</p>
-        <p className={styles.lowerMenuLink} onClick={() => onClickLowerMenu('active')}>Active</p>
-        <p className={styles.lowerMenuLink} onClick={() => onClickLowerMenu('completed')}>Completed</p>
+        <p className={styles.lowerMenuLink} onClick={(event) => {setFillterCondition('all') }}>All</p>
+        <p className={styles.lowerMenuLink} onClick={(event) => setFillterCondition('active')}>Active</p>
+        <p className={styles.lowerMenuLink} onClick={(event) => setFillterCondition('completed')}>Completed</p>
       </div>
 
       <span
         className={clearBtnStyles}
-        onClick={clearCompleted}
+        onClick={delAllCompleted}
       >
-        Clear complected
+        Clear completed
       </span>
     </section>
   );

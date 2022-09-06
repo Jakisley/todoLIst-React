@@ -1,107 +1,85 @@
 import styles from './Todo.module.css';
-import { useState } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 
 const Todo = (props) => {
+  const ref = useRef(null);
+  const { todo, todoArray, onChangeArray, delElement,changeCheck } = props;
+  const [toDoDescription, setToDoDescription] = useState(todo.description);
+  const [isChanged, setIsChanged] = useState(false)
+  const [inputTextStyles, setInputTextStyles] = useState('');
 
-  const { todo, todoArray, onChangeArray } = props;
-  const [todoChange, setTodoChange] = useState(todo.description);
-  const index = todoArray.findIndex(element => element.key === todo.key);
+  useEffect(()=>{
+    setInputTextStyles(`${styles.listElement} ${todo.state === 'active' ? '' : styles.textCopmleted}`);
+  },[todo.state])
 
-  let updatedTodoArr = [...todoArray];
+  const checkStyles = useMemo(() => {
+    return `${styles.listCheck} ${todo.state === 'active' ? '' : styles.checkCompleted}`;
+  }, [todo.state]);
 
-  const checkStyles = todo.state === 'active' ?
-    styles.listCheck :
-    `${styles.listCheck} ${styles.checkCompleted}`;
-  const inputStyles = todo.state === 'active' ?
-    styles.listElement :
-    `${styles.listElement} ${styles.textCopmleted}`;
+  const index = useMemo(() => {
+    return todoArray.findIndex(element => element.key === todo.key);
+  }, [todo.key, todoArray]);
+
+  let updatedTodoArr = useMemo(() => {
+    return [...todoArray];
+  }, [todoArray]);
 
   const handleChange = (ev) => {
-    setTodoChange(ev.target.value);
+    setToDoDescription(ev.target.value);
   };
 
-  const delElement = () => {
-    updatedTodoArr.splice(index, 1);
+  const doubleClickInput = () => {
+    const element = ref.current;
+    window.getSelection().removeAllRanges();
+    setInputTextStyles(inputTextStyles + `${styles.focusElement}`);
+    setIsChanged(true);
+    element.focus();
+  };
+
+  const onblur = () => {
+    const element = ref.current
+    setIsChanged(false);
+    updatedTodoArr[index].description = element.value;
+    setInputTextStyles(`${styles.listElement} ${todo.state === 'active' ? '' : styles.textCopmleted}`)
     onChangeArray(updatedTodoArr);
-  };
+    element.classList.remove(styles.focusElement);
 
-  const changeCheck = () => {
-    if (updatedTodoArr[index].state === 'active') {
-      updatedTodoArr[index].state = 'completed';
-    } else {
-      updatedTodoArr[index].state = 'active'
-    };
-    onChangeArray(updatedTodoArr);
-  };
-
-  const chageInput = (ev) => {
-    const sibling = ev.target.nextSibling
-    sibling.focus();
-    onfocus(sibling);
-
-  };
-
-  const onfocus = (element) => {
-
-    element.style.zIndex = 2;
-    element.onblur = () => onblur(element);
-    
-    document.addEventListener( 'click', (event) => {
-      if ( !event.composedPath().includes(element) && element.value !==' ') {
-        updatedTodoArr[index].description = element.value;
-        onChangeArray(updatedTodoArr);
-      }else{
-        setTodoChange(todo.description);
-      }
-    });
-
-  };
-
-  const onblur = (element) => {
-    element.style.zIndex = 0;
   };
 
   const handleKeyDown = (ev) => {
-
     if (ev.code === 'Enter') {
-      if (todoChange && todoChange[0]!==' ') {
-        updatedTodoArr[index].description = todoChange;
+      if (toDoDescription) {
+        updatedTodoArr[index].description = toDoDescription;
         onChangeArray(updatedTodoArr);
-        onblur(ev.target);
+        ref.current.blur();
       };
-    };
-    if (ev.code === 'Escape') {
-      setTodoChange(todo.description);
-      onblur(ev.target);
-    };
+    } else if (ev.code === 'Escape') {
+      setToDoDescription(todo.description);
+      ref.current.blur();
+    }
+
   };
 
   return (
-    <div
-      id={todo.id}
-      className={styles.listWrapper}
-    >
+    <div className={styles.listContainer}>
       <div
         className={checkStyles}
-        onClick={changeCheck}
+        onClick={()=>changeCheck(todo.key)}
       />
       <input
-        className={inputStyles}
-        type="text"
-        value={todo.description}
-        onDoubleClick={chageInput}
-        readOnly
-      />
-      <input
-        className={styles.bottomElement}
-        type="text"
-        value={todoChange}
+        ref={ref}
+        className={inputTextStyles}
+        value={toDoDescription}
+        onDoubleClick={doubleClickInput}
         onKeyDown={handleKeyDown}
         onChange={handleChange}
+        onBlur={onblur}
+        readOnly={!isChanged}
       />
       <div
         className={styles.listDestroyBtn}
-        onClick={delElement}>
+        onClick={() => delElement(todo.key)}
+      >
         ×
       </div>
     </div>
