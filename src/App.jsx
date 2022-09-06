@@ -44,6 +44,38 @@ const App = () => {
     setTodoArray(updatedTodoArr);
   };
 
+  const doubleClickInput = (ref, inputTextStyles, setInputTextStyles, setIsChanged) => {
+    const element = ref.current;
+    window.getSelection().removeAllRanges();
+    setInputTextStyles(inputTextStyles + `${styles.focusElement}`);
+    setIsChanged(true);
+    element.focus();
+  };
+
+  const onblur = (ref, setIsChanged, setInputTextStyles, state, key) => {
+    const element = ref.current
+    const index = getIndex(key);
+    setIsChanged(false);
+    updatedTodoArr[index].description = element.value;
+    setInputTextStyles(`${styles.listElement} ${state === 'active' ? '' : styles.textCopmleted}`)
+    setTodoArray(updatedTodoArr);
+  };
+
+  const handleKeyDownToDoInput = (ref, ev, toDoDescription, setToDoDescription, todo) => {
+    if (ev.code === 'Enter') {
+      if (toDoDescription) {
+        const index = getIndex(todo.key)
+        updatedTodoArr[index].description = toDoDescription;
+        setTodoArray(updatedTodoArr);
+        ref.current.blur();
+      };
+    } else if (ev.code === 'Escape') {
+      setToDoDescription(todo.description);
+      ref.current.blur();
+    }
+
+  };
+
   const delElement = (key) => {
     const index = todoArray.findIndex(element => element.key === key);
     updatedTodoArr.splice(index, 1);
@@ -83,6 +115,9 @@ const App = () => {
           onChangeArray={setTodoArray}
           delElement={delElement}
           changeCheck={changeCheck}
+          doubleClickInput={doubleClickInput}
+          onblur={onblur}
+          handleKeyDownToDoInput={handleKeyDownToDoInput}
         />
 
         <LowerMenu

@@ -2,7 +2,7 @@ import Todo from './Todo/Todo.jsx';
 import React from 'react';
 
 const TodoList = (props) => {
-const { fillteredArray, onChangeArray, delElement,changeCheck} = props;
+  const { fillteredArray, delElement, changeCheck, doubleClickInput, onblur, handleKeyDownToDoInput } = props;
 
   return (
     <section>
@@ -10,10 +10,11 @@ const { fillteredArray, onChangeArray, delElement,changeCheck} = props;
         <Todo
           key={todo.key}
           todo={todo}
-          todoArray={fillteredArray}
-          onChangeArray={onChangeArray}
           delElement={delElement}
           changeCheck={changeCheck}
+          doubleClickInput={doubleClickInput}
+          onblur={onblur}
+          handleKeyDownToDoInput={handleKeyDownToDoInput}
         />
       ))}
     </section>
